@@ -10,6 +10,7 @@ const Player = ({ songs, currentSong, setcurrentSong, isPlaying, setIsPlaying })
         currentTime: 0,
         endTime: 0,
         duration: 0,
+        animationPernentage: 0,
     });
     // Handlers
     const playSongHandler = () => {
@@ -27,7 +28,11 @@ const Player = ({ songs, currentSong, setcurrentSong, isPlaying, setIsPlaying })
         const endTime = e.target.duration - e.target.currentTime;
         const duration = e.target.duration;
 
-        setsongInfo({ ...songInfo, currentTime, endTime, duration });
+        const roundedCurrent = Math.round(currentTime);
+        const roundedDuration = Math.round(duration);
+        const animation = Math.round((roundedCurrent / roundedDuration) * 100);
+        console.log(songInfo.animationPernentage);
+        setsongInfo({ ...songInfo, currentTime, endTime, duration, animationPernentage: animation });
     };
 
     const getTime = (time) => {
@@ -65,17 +70,27 @@ const Player = ({ songs, currentSong, setcurrentSong, isPlaying, setIsPlaying })
             }
         }
     };
+
     return (
         <div className="player">
             <div className="time-control">
                 <p>{getTime(songInfo.currentTime) || "0:00"}</p>
-                <input
-                    type="range"
-                    min={0}
-                    max={songInfo.duration || "0:00"}
-                    onChange={dragHandler}
-                    value={songInfo.currentTime}
-                />
+                <div
+                    style={{ background: `linear-gradient(to right, ${currentSong.color[0]},${currentSong.color[1]})` }}
+                    className="track"
+                >
+                    <input
+                        type="range"
+                        min={0}
+                        max={songInfo.duration || "0:00"}
+                        onChange={dragHandler}
+                        value={songInfo.currentTime}
+                    />
+                    <div
+                        style={{ transform: `TranslateX(${songInfo.animationPernentage}%)` }}
+                        className="animate-track"
+                    ></div>
+                </div>
                 <p>{getTime(songInfo.endTime) || "0:00"}</p>
             </div>
             <div className="play-control">

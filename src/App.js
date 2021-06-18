@@ -14,10 +14,10 @@ function App() {
     const [currentSong, setcurrentSong] = useState(songs[0]);
     const [isPlaying, setIsPlaying] = useState(false);
     return (
-        <div className="App">
+        <div className={`App ${libraryStatus ? "library-active" : ""} `}>
             <Navbar libraryStatus={libraryStatus} setLibraryStatus={setLibraryStatus} />
 
-            <Song currentSong={currentSong} />
+            <Song isPlaying={isPlaying} currentSong={currentSong} />
 
             <Player
                 songs={songs}
